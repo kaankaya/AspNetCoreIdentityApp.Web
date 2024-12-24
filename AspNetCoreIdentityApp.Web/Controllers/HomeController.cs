@@ -37,8 +37,13 @@ namespace AspNetCoreIdentityApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel request)
         {
+            
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
             //create async ile request olarak gelen view modeldekileri verileri eþledik.
-            var identyResult = await _userManager.CreateAsync(new() { UserName=request.UserName,PhoneNumber=request.Phone,Email=request.Email},request.PasswordConfirm);
+            var identyResult = await _userManager.CreateAsync(new() { UserName = request.UserName, PhoneNumber = request.Phone, Email = request.Email }, request.PasswordConfirm);
             //baþarýlý ise mesaj verdik 
             if (identyResult.Succeeded)
             {
