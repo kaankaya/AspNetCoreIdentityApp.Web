@@ -1,3 +1,4 @@
+using AspNetCoreIdentityApp.Web.Extenisons;
 using AspNetCoreIdentityApp.Web.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +13,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon"));
 });
 //ýdentity için gerekli jenerik parametreyi verdik ve kullnacagý dbcontext i verdik
-builder.Services.AddIdentity<AppUser,AppRole>().AddEntityFrameworkStores<AppDbContext>();
+//burayý extensions a çevirdik
+builder.Services.AddIdentityWithExt();
 
 
 var app = builder.Build();
