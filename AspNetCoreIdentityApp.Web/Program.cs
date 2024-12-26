@@ -16,6 +16,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 //burayý extensions a çevirdik
 builder.Services.AddIdentityWithExt();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    var cookieBuilder = new CookieBuilder();
+    cookieBuilder.Name = "AppCookie";
+    options.LoginPath = new PathString("/Home/Signin");
+    options.Cookie = cookieBuilder;
+    //cookie 60 gün kalýcak
+    options.ExpireTimeSpan = TimeSpan.FromDays(60);
+    //kullanýcý  her giriþ yaptýgýnda 60 gün olarak yenileyecek
+    options.SlidingExpiration = true;
+});
 
 var app = builder.Build();
 

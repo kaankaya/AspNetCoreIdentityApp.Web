@@ -24,6 +24,9 @@ namespace AspNetCoreIdentityApp.Web.Extenisons
                 //büyük karakter zorunlu değil
                 options.Password.RequireUppercase = false;
                 options.Password.RequireDigit = false;
+                //locklama sistemi kilitlenince 3 dakika block koysun
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+                options.Lockout.MaxFailedAccessAttempts = 3;
 
             }).AddPasswordValidator<PasswordValidator>().AddUserValidator<UserValidator>().AddErrorDescriber<LocalizationIdentityErrorDescriber>().AddEntityFrameworkStores<AppDbContext>();
         }
