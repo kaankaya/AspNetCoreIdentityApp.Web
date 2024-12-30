@@ -4,6 +4,7 @@ using AspNetCoreIdentityApp.Web.Models;
 using AspNetCoreIdentityApp.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Common;
 
 namespace AspNetCoreIdentityApp.Web.Controllers
 {
@@ -100,6 +101,29 @@ namespace AspNetCoreIdentityApp.Web.Controllers
             return View();
            
         }
+
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel request)
+        {
+            var hasUser = await _userManager.FindByEmailAsync(request.Email); //bu kullanýcý varmý yokmu
+            if(hasUser is null)
+            {
+                ModelState.AddModelError(String.Empty, "Bu Email adresine sahip kullanýcý bulunamadý");
+                return View(); //return view yapýyoruz çünkü modelstate ler taþýnmaz.Ama eðer taþýmak istersek hatayý Tempdata ile taþýyoruz
+            }
+            string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(hasUser);
+            var passwordResetLink = Url.Action("ForgetPassword","Home",new {userId = hasUser.Id,Token=passwordResetToken}); //url oluþturuyoruz
+            //Email service
+            TempData["SuccessMessage"] = "Þifre Sýfýrlama Maili Gönderildi";
+            return RedirectToAction(nameof(ResetPassword));
+        }
+
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -1,5 +1,6 @@
 using AspNetCoreIdentityApp.Web.Extenisons;
 using AspNetCoreIdentityApp.Web.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon"));
 });
+
 //ýdentity için gerekli jenerik parametreyi verdik ve kullnacagý dbcontext i verdik
 //burayý extensions a çevirdik
 builder.Services.AddIdentityWithExt();
@@ -43,8 +45,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-app.UseAuthorization();
+app.UseAuthentication(); //kimlik doðrulama
+app.UseAuthorization(); //kimlik yetkilendirme
 
 app.MapControllerRoute(
     name: "areas",
